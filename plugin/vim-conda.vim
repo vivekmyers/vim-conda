@@ -140,6 +140,7 @@ endif
 function! s:CondaChangeEnv()
    " Python <<EOF
    Python vimconda.conda_change_env()
+   filetype detect
 endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 

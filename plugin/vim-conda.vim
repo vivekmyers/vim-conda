@@ -79,6 +79,7 @@ function! s:CondaDeactivate()
     " When you deactivate, you always go back to 'base" environment
     let $CONDA_DEFAULT_ENV = 'base'
     let $PATH = g:conda_plain_path
+    let $CONDA_PREFIX = g:conda_root
     Python vimconda.condadeactivate()
 endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -123,7 +124,7 @@ if exists("$CONDA_DEFAULT_ENV")
     " was already activated before launching vim, so we need to make
     " the required changes internally.
     let g:conda_startup_env = $CONDA_DEFAULT_ENV
-    echom g:conda_startup_env
+    " echom g:conda_startup_env
     " This may get overridden later if the default env was in fact
     " a prefix env.
     let g:conda_startup_was_prefix = 0
@@ -139,12 +140,20 @@ endif
 
 function! s:CondaChangeEnv()
    " Python <<EOF
-   Python vimconda.conda_change_env()
+    Python vimconda.conda_change_env()
    filetype detect
 endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 command! CondaChangeEnv call s:CondaChangeEnv()
+
+function! s:CondaChangeTo(envname)
+    " Python <<EOF
+    exe 'Python vimconda.conda_change_env("'.a:envname.'")'
+    filetype detect
+endfunction
+
+command! -nargs=1 CondaActivate call s:CondaChangeTo(<f-args>)
 
 " ISSUES
 " http://stackoverflow.com/questions/13402899/why-does-my-vim-command-line-path-differ-from-my-shell-path

@@ -351,7 +351,7 @@ def conda_startup_env():
         conda_activate(envname, envpath, root)
 
 
-def conda_change_env():
+def conda_change_env(envname = None):
     """Obtain conda information.
 
     It's great they provide output in
@@ -373,16 +373,24 @@ def conda_change_env():
     envnames = dict(zip(keys, envs))
     # Add the base as an option (so selecting `base` will trigger a deactivation
     # Detect the currently-selected env. Remove it from the selectable options.
-    default_prefix = get_default_prefix()
-    current_env = root_prefix
+    # default_prefix = get_default_prefix()
+    # current_env = root_prefix
 
-    for key, value in envnames.items():
-        if value == default_prefix:
-            current_env = key
-            break
+    # for key, value in envnames.items():
+    #     if value == default_prefix:
+    #         current_env = key
+    #         break
+
+
+    current_env = os.getenv("CONDA_DEFAULT_ENV")
     # Don't provide current_env as an option for user
     if current_env in envnames:
         del envnames[current_env]
+
+    extra_base = [x for x in envnames if envnames[x] == root_prefix and x != "base"]
+    for x in extra_base:
+        del envnames[x]
+
 
     # Provide the selectable options to the `input()` callback function via
     # a global var: `g:condaenvs`
@@ -395,9 +403,12 @@ def conda_change_env():
     #     extra=[]
     vim.command('let g:condaenvs = "' + "\n".join(envnames.keys()) + '"')
     # Ask the user to choose a new env
-    choice = python_input(
-        "Change conda env [current: {}]: ".format(current_env)
-    )
+    if envname is None:
+        choice = python_input(
+            "Change conda env [current: {}]: ".format(current_env)
+        )
+    else:
+        choice = envname
     vim.command("redraw")
 
     if choice == "base":

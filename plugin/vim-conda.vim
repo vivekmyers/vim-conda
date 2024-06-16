@@ -57,6 +57,7 @@ endfunction
 function! s:CondaActivate(envname, envpath, envsroot)
     " Set environment variables $PATH and $CONDA_DEFAULT_ENV
     let $CONDA_DEFAULT_ENV = a:envname
+    let $ENVNAME = a:envname
     if has("win32") || has("win64")
         " TODO: Doesn't include Lirary/mingw-w64/bin, but this may only be
         " issue for activate.bat, which uses it to run bash scripts. win32
@@ -154,6 +155,8 @@ function! s:CondaChangeTo(envname)
 endfunction
 
 command! -nargs=1 CondaActivate call s:CondaChangeTo(<f-args>)
+
+let $ENVNAME = $CONDA_DEFAULT_ENV
 
 " ISSUES
 " http://stackoverflow.com/questions/13402899/why-does-my-vim-command-line-path-differ-from-my-shell-path

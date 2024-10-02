@@ -275,8 +275,10 @@ def setcondaplainpath():
     # up-to-date version of the environment, we'll have to use
     # Vim's $VAR variables and rather act on that.
     # TODO: Fix use of py getenv
-    path = os.getenv("PATH")
-    conda_default_env = os.getenv("CONDA_DEFAULT_ENV")
+    # path = os.getenv("PATH")
+    path = vim.eval("$PATH")
+    # conda_default_env = os.getenv("CONDA_DEFAULT_ENV")
+    conda_default_env = vim.eval("$CONDA_DEFAULT_ENV")
     if conda_default_env:
         # We appear to be inside a conda env already. We want the path
         # that we would have WITHOUT being in a conda env, e.g. what

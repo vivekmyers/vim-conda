@@ -291,6 +291,8 @@ def setcondaplainpath():
             [x for x in path.split(os.pathsep) if default_prefix not in x]
         )
         vim.command("let l:temproot = '" + default_prefix + "'")
+    else:
+        vim.command("let l:temproot = 'base'")
     vim.command("let l:temppath = '" + path + "'")
 
 

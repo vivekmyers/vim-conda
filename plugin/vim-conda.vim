@@ -79,6 +79,7 @@ function! s:CondaDeactivate()
     "       from inside a conda env..
     " When you deactivate, you always go back to 'base" environment
     let $CONDA_DEFAULT_ENV = 'base'
+    let $ENVNAME = 'base'
     let $PATH = g:conda_plain_path
     let $CONDA_PREFIX = g:conda_root
     Python vimconda.condadeactivate()
@@ -156,7 +157,7 @@ endfunction
 
 command! -nargs=1 CondaActivate call s:CondaChangeTo(<f-args>)
 
-let $ENVNAME = $CONDA_DEFAULT_ENV
+let $ENVNAME = $CONDA_DEFAULT_ENV ?? $VIRTUAL_ENV ?? 'base'
 
 " ISSUES
 " http://stackoverflow.com/questions/13402899/why-does-my-vim-command-line-path-differ-from-my-shell-path
